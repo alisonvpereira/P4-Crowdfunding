@@ -2,8 +2,8 @@ from django.http import Http404
 from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Project, Pledge
-from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer
+from .models import Project, Pledge, Category, Skill
+from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer, CategorySerializer, SkillSerializer
 from .permissions import IsOwnerOrReadOnly
 
 
@@ -56,6 +56,7 @@ class ProjectDetail(APIView):
         if serializer.is_valid():
             serializer.save()
 
+
 class PledgeList(APIView):
 
     def get(self, request):
@@ -75,3 +76,66 @@ class PledgeList(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST,
         )
+
+class CategoryList(APIView):
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get(self, request):
+        category = Category.objects.all()
+        serializer = CategorySerializer(category, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED,
+                )
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    
+    def put(self, request, pk):
+        category = self.get_object(pk)
+        data = request.data
+        serializer = CategorySerializer(
+            instance=category,
+            data=data,
+            partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()
+
+
+class SkillList(APIView):
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get(self, request):
+        skill = Skill.objects.all()
+        serializer = SkillSerializer(skill, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = SkillSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED,
+                )
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    
+    def put(self, request, pk):
+        skill = self.get_object(pk)
+        data = request.data
+        serializer = SkillSerializer(
+            instance=skill,
+            data=data,
+            partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()

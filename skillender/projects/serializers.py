@@ -1,11 +1,12 @@
 from rest_framework import serializers
-from .models import Project, Pledge
+from .models import Project, Pledge, Category, Skill
 
 class ProjectSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     title = serializers.CharField(max_length=200)
     description = serializers.CharField(max_length=200)
-    goal = serializers.IntegerField()
+    display_category = serializers.CharField(max_length=200)
+    goal_hours = serializers.IntegerField()
     image = serializers.URLField()
     is_open = serializers.BooleanField()
     date_created = serializers.DateTimeField()
@@ -14,8 +15,6 @@ class ProjectSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         return Project.objects.create(**validated_data)
-
-
 
 
 class PledgeSerializer(serializers.Serializer):
@@ -36,7 +35,7 @@ class ProjectDetailSerializer(ProjectSerializer):
         instance.title = validated_data.get('title', instance.title)
         instance.description = validated_data.get('description',
         instance.description)
-        instance.goal = validated_data.get('goal', instance.goal)
+        instance.goal_hours = validated_data.get('goal_hours', instance.goal_hours)
         instance.image = validated_data.get('image', instance.image)
         instance.is_open = validated_data.get('is_open',
         instance.is_open)
@@ -46,3 +45,23 @@ class ProjectDetailSerializer(ProjectSerializer):
         instance.owner)
         instance.save()
         return instance
+
+
+class CategorySerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    name = serializers.CharField(max_length=200)
+    description = serializers.CharField(max_length=200)
+
+    def create(self, validated_data):
+        return Category.objects.create(**validated_data)
+
+
+class SkillSerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    name = serializers.CharField(max_length=200)
+    description = serializers.CharField(max_length=200)
+
+    def create(self, validated_data):
+        return Skill.objects.create(**validated_data)
+
+

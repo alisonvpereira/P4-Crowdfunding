@@ -1,0 +1,1 @@
+web:gunicorn  --pythonpath skillender skillender.wsgi --log-file -

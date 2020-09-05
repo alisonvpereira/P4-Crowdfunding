@@ -1,1 +1,1 @@
-web:gunicorn  --pythonpath skillender skillender.wsgi --log-file -
+web: gunicorn  --pythonpath skillender skillender.wsgi --log-file -

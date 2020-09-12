@@ -5,7 +5,8 @@ class ProjectSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     title = serializers.CharField(max_length=200)
     description = serializers.CharField(max_length=200)
-    display_category = serializers.CharField(max_length=200)
+    category = serializers.SlugRelatedField('name', many=True,
+        queryset=Category.objects.all())
     goal_hours = serializers.IntegerField()
     image = serializers.URLField()
     is_open = serializers.BooleanField()
@@ -14,7 +15,10 @@ class ProjectSerializer(serializers.Serializer):
     
 
     def create(self, validated_data):
-        return Project.objects.create(**validated_data)
+        categories = validated_data.pop('category')
+        project = Project.objects.create(**validated_data)
+        project.category.set(categories)
+        return project
 
 
 class PledgeSerializer(serializers.Serializer):

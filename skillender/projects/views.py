@@ -29,14 +29,16 @@ class ProjectList(APIView):
 
 
 class ProjectDetail(APIView):
-    # permission_classes = [
-    #     permissions.IsAuthenticatedOrReadOnly,
-    #     IsOwnerOrReadOnly
-    # ]
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly
+    ]
     
     def get_object(self, pk):
         try:
-            return Project.objects.get(pk=pk)
+            project = Project.objects.get(pk=pk)
+            self.check_object_permissions(self.request, project)
+            return project
         except Project.DoesNotExist:
             raise Http404
 
@@ -55,6 +57,14 @@ class ProjectDetail(APIView):
         )
         if serializer.is_valid():
             serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+                )
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 class PledgeList(APIView):
@@ -78,7 +88,11 @@ class PledgeList(APIView):
         )
 
 class CategoryList(APIView):
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly
+    ]
+
     def get(self, request):
         category = Category.objects.all()
         serializer = CategorySerializer(category, many=True)
@@ -98,6 +112,10 @@ class CategoryList(APIView):
         )
 
 class CategoryDetail(APIView):    
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly
+    ]
     def get_object(self, pk):
         try:
             return Category.objects.get(pk=pk)
@@ -137,7 +155,10 @@ class CategoryDetail(APIView):
 
 
 class SkillList(APIView):
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly
+    ]
     def get(self, request):
         skill = Skill.objects.all()
         serializer = SkillSerializer(skill, many=True)
@@ -156,7 +177,11 @@ class SkillList(APIView):
             status=status.HTTP_400_BAD_REQUEST,
         )
     
-class SkillDetail(APIView):    
+class SkillDetail(APIView):
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly
+    ]    
     def get_object(self, pk):
         try:
             return Skill.objects.get(pk=pk)

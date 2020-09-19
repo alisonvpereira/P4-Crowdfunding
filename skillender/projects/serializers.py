@@ -59,6 +59,14 @@ class CategorySerializer(serializers.Serializer):
     def create(self, validated_data):
         return Category.objects.create(**validated_data)
 
+class CategoryDetailSerializer(CategorySerializer):
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.description = validated_data.get('description', instance.description)
+        instance.save()
+        return instance
+    
 
 class SkillSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()

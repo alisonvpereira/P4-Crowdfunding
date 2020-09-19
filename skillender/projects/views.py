@@ -3,7 +3,7 @@ from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Project, Pledge, Category, Skill
-from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer, CategorySerializer, SkillSerializer
+from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer, CategorySerializer, CategoryDetailSerializer, SkillSerializer
 from .permissions import IsOwnerOrReadOnly
 
 
@@ -78,7 +78,7 @@ class PledgeList(APIView):
         )
 
 class CategoryList(APIView):
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     def get(self, request):
         category = Category.objects.all()
         serializer = CategorySerializer(category, many=True)
@@ -96,17 +96,45 @@ class CategoryList(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST,
         )
+
+class CategoryDetail(APIView):
     
+    def get_object(self, pk):
+        try:
+            return Category.objects.get(pk=pk)
+        except Category.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        category = self.get_object(pk)
+        serializer = CategoryDetailSerializer(category)
+        return Response(serializer.data)
+
     def put(self, request, pk):
         category = self.get_object(pk)
         data = request.data
-        serializer = CategorySerializer(
+        serializer = CategoryDetailSerializer(
             instance=category,
             data=data,
             partial=True
         )
         if serializer.is_valid():
             serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+                )
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    def delete(self, request, pk, format=None):
+        category = self.get_object(pk)
+        category.delete()
+        return Response("Category Deleted", status=status.HTTP_204_NO_CONTENT)
+
+
 
 
 class SkillList(APIView):

@@ -36,17 +36,15 @@ class ProjectDetailSerializer(ProjectSerializer):
     pledges = PledgeSerializer(many=True, read_only=True)
 
     def update(self, instance, validated_data):
+        categories = validated_data.pop('category')
         instance.title = validated_data.get('title', instance.title)
-        instance.description = validated_data.get('description',
-        instance.description)
+        instance.description = validated_data.get('description', instance.description)
+        instance.category.set = validated_data.get('category', instance.category.set(categories))
         instance.goal_hours = validated_data.get('goal_hours', instance.goal_hours)
         instance.image = validated_data.get('image', instance.image)
-        instance.is_open = validated_data.get('is_open',
-        instance.is_open)
-        instance.date_created = validated_data.get('date_created',
-        instance.date_created)
-        instance.owner = validated_data.get('ownder',
-        instance.owner)
+        instance.is_open = validated_data.get('is_open', instance.is_open)
+        instance.date_created = validated_data.get('date_created', instance.date_created)
+        instance.owner = validated_data.get('owner', instance.owner)
         instance.save()
         return instance
 

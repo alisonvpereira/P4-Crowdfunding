@@ -60,7 +60,6 @@ class CategorySerializer(serializers.Serializer):
         return Category.objects.create(**validated_data)
 
 class CategoryDetailSerializer(CategorySerializer):
-
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.description = validated_data.get('description', instance.description)
@@ -75,5 +74,12 @@ class SkillSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         return Skill.objects.create(**validated_data)
+
+class SkillDetailSerializer(SkillSerializer):
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.description = validated_data.get('description', instance.description)
+        instance.save()
+        return instance
 
 

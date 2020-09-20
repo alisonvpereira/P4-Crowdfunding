@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from users.models import CustomUser
 
 
 
@@ -62,7 +63,7 @@ class Pledge(models.Model):
         related_name='pledges'
     )
     volunteer = models.ForeignKey(
-        get_user_model(),
+        CustomUser,
         on_delete=models.CASCADE,
         related_name='volunteer_pledges'
     )

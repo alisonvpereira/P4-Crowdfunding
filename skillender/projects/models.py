@@ -39,7 +39,8 @@ class Project(models.Model):
     goal_hours = models.IntegerField()
     image = models.URLField()
     is_open = models.BooleanField()
-    date_created = models.DateTimeField()
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now =True)
     owner = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
@@ -55,7 +56,7 @@ class Project(models.Model):
     display_category.short_description = 'Category'
 
     class Meta:
-        ordering = ['title']
+        ordering = ['id']
     
     def __str__(self):
         return self.title
@@ -65,6 +66,8 @@ class Pledge(models.Model):
     skill = models.ManyToManyField(Skill, help_text='Select a skill for this project')
     comment = models.CharField(max_length=200)
     anonymous = models.BooleanField()
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now =True)
     project = models.ForeignKey(
         'Project',
         on_delete=models.CASCADE,

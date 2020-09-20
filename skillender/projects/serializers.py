@@ -10,7 +10,8 @@ class ProjectSerializer(serializers.Serializer):
     goal_hours = serializers.IntegerField()
     image = serializers.URLField()
     is_open = serializers.BooleanField()
-    date_created = serializers.DateTimeField()
+    date_created = serializers.ReadOnlyField()
+    date_updated = serializers.ReadOnlyField()
     owner = serializers.ReadOnlyField(source='owner.username')
     
 
@@ -23,6 +24,8 @@ class ProjectSerializer(serializers.Serializer):
 
 class PledgeSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
+    date_created = serializers.ReadOnlyField()
+    date_updated = serializers.ReadOnlyField()
     hours = serializers.IntegerField()
     skill = serializers.SlugRelatedField('name', many=True,
         queryset=Skill.objects.all())
@@ -31,6 +34,7 @@ class PledgeSerializer(serializers.Serializer):
     volunteer = serializers.ReadOnlyField()
     project_id = serializers.IntegerField()
     project_title = serializers.ReadOnlyField()
+
 
     def create(self, validated_data):
         skills = validated_data.pop('skill')

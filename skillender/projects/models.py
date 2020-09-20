@@ -11,8 +11,10 @@ class Skill(models.Model):
     description = models.TextField()
 
     class Meta:
+        verbose_name = "Skill"
+        verbose_name_plural = "Skills"        
         ordering = ['name']
-    
+        
     def __str__(self):
         return self.name
 
@@ -52,6 +54,12 @@ class Project(models.Model):
     
     display_category.short_description = 'Category'
 
+    class Meta:
+        ordering = ['title']
+    
+    def __str__(self):
+        return self.title
+
 class Pledge(models.Model):
     hours = models.IntegerField()
     skill = models.ManyToManyField(Skill, help_text='Select a skill for this project')
@@ -79,6 +87,9 @@ class Pledge(models.Model):
         return ', '.join(skill.name for skill in self.skill.all()[:3])
     
     display_skill.short_description = 'Skill'
+
+    class Meta:
+        ordering = ['id']
 
 
 

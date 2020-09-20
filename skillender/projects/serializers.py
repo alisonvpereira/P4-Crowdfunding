@@ -11,7 +11,7 @@ class ProjectSerializer(serializers.Serializer):
     image = serializers.URLField()
     is_open = serializers.BooleanField()
     date_created = serializers.DateTimeField()
-    owner = serializers.ReadOnlyField(source='owner.id')
+    owner = serializers.ReadOnlyField(source='owner.username')
     
 
     def create(self, validated_data):
@@ -24,16 +24,24 @@ class ProjectSerializer(serializers.Serializer):
 class PledgeSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     hours = serializers.IntegerField()
+    skill = serializers.SlugRelatedField('name', many=True,
+        queryset=Skill.objects.all())
     comment = serializers.CharField(max_length=200)
     anonymous = serializers.BooleanField()
     volunteer = serializers.ReadOnlyField()
     project_id = serializers.IntegerField()
+    project_title = serializers.ReadOnlyField()
 
     def create(self, validated_data):
+        skills = validated_data.pop('skill')
+        pledge = Pledge.objects.create(**validated_data)
+        pledge.skill.set(skills)
         return Pledge.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         instance.hours = validated_data.get('hours', instance.hours)
+        skills = validated_data.pop('skill')
+        instance.skill.set = validated_data.get('skill', instance.skill.set(skills))
         instance.comment = validated_data.get('comment', instance.comment)
         instance.anonymous = validated_data.get('anonymous', instance.anonymous)
         instance.volunteer = validated_data.get('volunteer', instance.volunteer)

@@ -137,7 +137,7 @@ class PledgeDetail(APIView):
 class CategoryList(APIView):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly
+        permissions.IsAdminUser
     ]
 
     def get(self, request):
@@ -161,7 +161,7 @@ class CategoryList(APIView):
 class CategoryDetail(APIView):    
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly
+        permissions.IsAdminUser
     ]
     def get_object(self, pk):
         try:
@@ -204,7 +204,7 @@ class CategoryDetail(APIView):
 class SkillList(APIView):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly
+        permissions.IsAdminUser
     ]
     def get(self, request):
         skill = Skill.objects.all()
@@ -227,7 +227,7 @@ class SkillList(APIView):
 class SkillDetail(APIView):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly
+        permissions.IsAdminUser
     ]    
     def get_object(self, pk):
         try:

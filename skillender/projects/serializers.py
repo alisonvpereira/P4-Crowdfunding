@@ -36,7 +36,7 @@ class PledgeSerializer(serializers.Serializer):
         skills = validated_data.pop('skill')
         pledge = Pledge.objects.create(**validated_data)
         pledge.skill.set(skills)
-        return Pledge.objects.create(**validated_data)
+        return pledge
 
     def update(self, instance, validated_data):
         instance.hours = validated_data.get('hours', instance.hours)

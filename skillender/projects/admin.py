@@ -11,7 +11,7 @@ class ProjectAdmin(admin.ModelAdmin):
     # search_fields = ['title', 'content']
     
 @admin.register(Pledge)
-class ProjectAdmin(admin.ModelAdmin):
-    # list_display = ['owner', 'title', 'display_category', 'is_open', 'date_created']
-    list_filter = ("skill", "anonymous")
+class PledgeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'volunteer', 'anonymous', 'display_skill']
+    list_filter = ("project__title", "skill", "anonymous")
     # search_fields = ['title', 'content']

@@ -68,8 +68,14 @@ class Pledge(models.Model):
         related_name='volunteer_pledges'
     )
 
+    def volunteer(self):
+        return self.owner.username
+
+    def project_title(self):
+        return self.project.title
+
     def display_skill(self):
-        """Create a string for the Category. This is required to display category in Admin."""
+        """Create a string for the Skill. This is required to display skill in Admin."""
         return ', '.join(skill.name for skill in self.skill.all()[:3])
     
     display_skill.short_description = 'Skill'

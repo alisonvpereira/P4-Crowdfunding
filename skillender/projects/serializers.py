@@ -26,7 +26,7 @@ class PledgeSerializer(serializers.Serializer):
     hours = serializers.IntegerField()
     comment = serializers.CharField(max_length=200)
     anonymous = serializers.BooleanField()
-    volunteer = serializers.ReadOnlyField(source='owner.username')
+    volunteer = serializers.ReadOnlyField()
     project_id = serializers.IntegerField()
 
     def create(self, validated_data):
@@ -36,7 +36,7 @@ class PledgeSerializer(serializers.Serializer):
         instance.hours = validated_data.get('hours', instance.hours)
         instance.comment = validated_data.get('comment', instance.comment)
         instance.anonymous = validated_data.get('anonymous', instance.anonymous)
-        instance.volunteer = validated_data.get('owner', instance.owner)
+        instance.volunteer = validated_data.get('volunteer', instance.volunteer)
         instance.project_id = validated_data.get('project_id', instance.project_id)
         instance.save()
         return instance

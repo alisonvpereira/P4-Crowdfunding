@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Project, Pledge, Category, Skill, CustomUser
 from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer, CategorySerializer, CategoryDetailSerializer, SkillSerializer, SkillDetailSerializer
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly, IsStaffOrReadOnly
 
 
 class ProjectList(APIView):
@@ -73,6 +73,10 @@ class ProjectDetail(APIView):
 
 
 class PledgeList(APIView):
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly
+    ]
 
     def get(self, request):
         pledges = Pledge.objects.all()
@@ -137,7 +141,7 @@ class PledgeDetail(APIView):
 class CategoryList(APIView):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
-        permissions.IsAdminUser
+        IsStaffOrReadOnly
     ]
 
     def get(self, request):
@@ -161,7 +165,7 @@ class CategoryList(APIView):
 class CategoryDetail(APIView):    
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
-        permissions.IsAdminUser
+        IsStaffOrReadOnly
     ]
     def get_object(self, pk):
         try:
@@ -204,8 +208,8 @@ class CategoryDetail(APIView):
 class SkillList(APIView):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
-        permissions.IsAdminUser
-    ]
+        IsStaffOrReadOnly
+    ]  
     def get(self, request):
         skill = Skill.objects.all()
         serializer = SkillSerializer(skill, many=True)
@@ -213,21 +217,24 @@ class SkillList(APIView):
 
     def post(self, request):
         serializer = SkillSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
+        if request.user.is_staff:
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    serializer.data,
+                    status=status.HTTP_201_CREATED,
+                    )
             return Response(
-                serializer.data,
-                status=status.HTTP_201_CREATED,
-                )
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return Response(serializer.errors,
+                status=status.HTTP_403)
     
 class SkillDetail(APIView):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
-        permissions.IsAdminUser
+        IsStaffOrReadOnly
     ]    
     def get_object(self, pk):
         try:

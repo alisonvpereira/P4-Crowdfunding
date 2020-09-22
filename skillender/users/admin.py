@@ -5,8 +5,8 @@ from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser 
 from projects.models import Project, Pledge
 
-class CustomUserInstanceInline(admin.TabularInline):
-    model = Project
+# class CustomUserInstanceInline(admin.TabularInline):
+#     model = CustomUser
 
 # class CustomUserAdmin(UserAdmin):
 #     add_form = CustomUserCreationForm
@@ -19,4 +19,6 @@ class CustomUserInstanceInline(admin.TabularInline):
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email')
+    list_display = ('is_staff', 'is_superuser', 'username', 'email', 'date_joined', 'last_login')
+    list_filter = ['is_superuser', 'is_staff']
+    ordering = ['username']

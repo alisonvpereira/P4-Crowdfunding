@@ -1,14 +1,17 @@
 from django.http import Http404
+from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from rest_framework import status, permissions
 from rest_framework.response import Response
-from rest_framework import status
+from django.contrib.auth import authenticate, login
 from .models import CustomUser
 from .serializers import CustomUserSerializer
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsCurrentUserOrReadOnly, IsNotAuthenticated
+
 
 class CustomUserList(APIView):
-
+    permission_classes = [IsNotAuthenticated]
+        
     def get(self, request):
         users = CustomUser.objects.all()
         serializer = CustomUserSerializer(users, many=True)
@@ -18,18 +21,21 @@ class CustomUserList(APIView):
         serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
+            return Response({"status":"success","response":"User Successfully Created"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
 
 class CustomUserDetail(APIView):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly
+        IsCurrentUserOrReadOnly        
     ]
 
     def get_object(self, pk):
         try:
-            return CustomUser.objects.get(pk=pk)
+            user = CustomUser.objects.get(pk=pk)
+            self.check_object_permissions(self.request, user)
+            return user
         except CustomUser.DoesNotExist:
             raise Http404
         

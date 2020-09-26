@@ -9,6 +9,7 @@ class Skill(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created at")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated at")
     description = models.TextField()
+    image = models.URLField()
 
     class Meta:
         verbose_name = "Skill"
@@ -24,6 +25,7 @@ class Category(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created at")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated at")
     description = models.TextField()
+    image = models.URLField()
 
     class Meta:
         verbose_name = "Category"

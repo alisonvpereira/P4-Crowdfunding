@@ -74,6 +74,9 @@ class CategorySerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     name = serializers.CharField(max_length=200)
     description = serializers.CharField(max_length=200)
+    created_at = serializers.ReadOnlyField()
+    updated_at = serializers.ReadOnlyField()
+    image = serializers.URLField()
 
     def create(self, validated_data):
         return Category.objects.create(**validated_data)
@@ -90,6 +93,9 @@ class SkillSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     name = serializers.CharField(max_length=200)
     description = serializers.CharField(max_length=200)
+    created_at = serializers.ReadOnlyField()
+    updated_at = serializers.ReadOnlyField()
+    image = serializers.URLField()
 
     def create(self, validated_data):
         return Skill.objects.create(**validated_data)

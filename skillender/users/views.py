@@ -31,21 +31,24 @@ class CustomUserDetail(APIView):
         IsCurrentUserOrReadOnly        
     ]
 
-    def get_object(self, pk):
+    def get_slug_field(self):
+        return 'user__username'
+
+    def get_object(self, username):
         try:
-            user = CustomUser.objects.get(pk=pk)
+            user = CustomUser.objects.get(username=username)
             self.check_object_permissions(self.request, user)
             return user
         except CustomUser.DoesNotExist:
             raise Http404
         
-    def get(self, request, pk):
-        user = self.get_object(pk)
+    def get(self, request, username):
+        user = self.get_object(username)
         serializer = CustomUserSerializer(user)
         return Response(serializer.data)
     
-    def put(self, request, pk):
-        user = self.get_object(pk)
+    def put(self, request, username):
+        user = self.get_object(username)
         data = request.data
         serializer = CustomUserSerializer(
             instance=user,

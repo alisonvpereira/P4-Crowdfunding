@@ -2,7 +2,7 @@ from django.http import Http404
 from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Project, Pledge, Category, Skill, CustomUser
+from .models import Project, Pledge, Category, Skill
 from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer, CategorySerializer, CategoryDetailSerializer, SkillSerializer, SkillDetailSerializer
 from .permissions import IsOwnerOrReadOnly, IsStaffOrReadOnly
 

@@ -8,6 +8,7 @@ class CustomUserSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=200)
     email = serializers.CharField(max_length=200)
     password = serializers.CharField(write_only=True)
+    image = serializers.URLField(source='profile.image')
 
 
 

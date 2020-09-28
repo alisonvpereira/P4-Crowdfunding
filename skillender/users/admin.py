@@ -2,19 +2,10 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 # from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser 
+from .models import CustomUser , Profile
 from projects.models import Project, Pledge
 
-# class CustomUserInstanceInline(admin.TabularInline):
-#     model = CustomUser
 
-# class CustomUserAdmin(UserAdmin):
-#     add_form = CustomUserCreationForm
-#     form = CustomUserChangeForm
-#     model = CustomUser
-#     list_display = ('username', 'last_name', 'first_name', 'date_of_birth')
-#     # fields = ('first_name', 'last_name', 'date_of_birth')
-#     inlines = [CustomUserInstanceInline]
 
 
 @admin.register(CustomUser)
@@ -22,3 +13,8 @@ class CustomUserAdmin(admin.ModelAdmin):
     list_display = ('is_staff', 'is_superuser', 'username', 'email', 'date_joined', 'last_login')
     list_filter = ['is_superuser', 'is_staff']
     ordering = ['username']
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display =['user', 'created_at', 'updated_at']
+    list_filter = ['user__is_staff', 'user__is_superuser']

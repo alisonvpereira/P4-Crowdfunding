@@ -10,11 +10,11 @@ from projects.models import Project, Pledge
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('is_staff', 'is_superuser', 'username', 'email', 'date_joined', 'last_login')
+    list_display = ('username', 'email', 'date_joined', 'last_login')
     list_filter = ['is_superuser', 'is_staff']
     ordering = ['username']
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display =['user', 'created_at', 'updated_at']
-    list_filter = ['user__is_staff', 'user__is_superuser']
+    list_display =['user', 'display_skill', 'created_at', 'updated_at']
+    list_filter = ['skills', 'user__is_staff', 'user__is_superuser']

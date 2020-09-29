@@ -9,6 +9,8 @@ class CustomUserSerializer(serializers.Serializer):
     email = serializers.CharField(max_length=200)
     password = serializers.CharField(write_only=True)
     image = serializers.URLField(source='profile.image')
+    is_superuser = serializers.BooleanField()
+    is_staff = serializers.BooleanField()
 
 
 
@@ -43,6 +45,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     # bio = serializers.CharField(allow_blank=True, required=False)
     # image = serializers.URLField()
     # website = serializers.URLField()
+    skills = serializers.SlugRelatedField('name', many=True,
+        queryset=Skill.objects.all())
 
     class Meta:
         model = Profile

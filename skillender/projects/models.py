@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 
 
 
+
 class Skill(models.Model):
     name = models.CharField(max_length=200, help_text='Enter a skill')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created at")
@@ -77,10 +78,14 @@ class Pledge(models.Model):
     owner = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
-        related_name='volunteer_pledges'
+        related_name='pledges'
     )
 
+
     def volunteer(self):
+        return self.owner.username
+
+    def username(self):
         return self.owner.username
 
     def project_title(self):

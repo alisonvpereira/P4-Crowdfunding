@@ -16,5 +16,5 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display =['user', 'display_skill', 'created_at', 'updated_at']
-    list_filter = ['skills', 'user__is_staff', 'user__is_superuser']
+    list_display =['user', 'created_at', 'updated_at']
+    list_filter = ['user__skills', 'user__is_staff', 'user__is_superuser']

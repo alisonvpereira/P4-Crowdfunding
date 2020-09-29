@@ -1,5 +1,5 @@
 from django.http import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import status, permissions
 from rest_framework.response import Response
@@ -77,11 +77,14 @@ class ProfileView(APIView):
 
     def get_object(self, username):
         try:
-            profile = Profile.objects.select_related('user').get(
-                user__username=username
-            )
-            self.check_object_permissions(self.request, profile)
-            return profile
+            # profile = Profile.objects.select_related('user').get(
+            #     user__username=username
+            # )
+            # self.check_object_permissions(self.request, username)
+            # return username
+            user = CustomUser.objects.get(username=username)
+            self.check_object_permissions(self.request, user)
+            return user
         except Profile.DoesNotExist:
             raise Http404
     

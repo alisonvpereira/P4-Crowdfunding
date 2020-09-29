@@ -6,10 +6,17 @@ from django.dispatch import receiver
 
 
 
+
 class CustomUser(AbstractUser):
     username = models.CharField(max_length=20, unique=True)
     email = models.CharField(max_length=100, unique=True)
     password = models.CharField(max_length=80)
+
+    skills = models.ManyToManyField(Skill, blank=True)
+    def display_skill(self):
+        """Create a string for the Skill. This is required to display category in Admin."""
+        return ', '.join(skills.name for skills in self.skills.all()[:3])
+    display_skill.short_description = 'Skills'
     
     def __str__(self):
         return self.username
@@ -24,14 +31,13 @@ class Profile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    skills = models.ManyToManyField(Skill, blank=True)
-    def display_skill(self):
-        """Create a string for the Skill. This is required to display category in Admin."""
-        return ', '.join(skills.name for skills in self.skills.all()[:3])
-    display_skill.short_description = 'Skills'
+
+
+
 
     def __str__(self):
         return self.user.username
+
 
 
 

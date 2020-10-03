@@ -33,7 +33,6 @@ class ProjectDetail(APIView):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly, 
         IsOwnerOrReadOnly,
-        permissions.IsAuthenticated
         
     ]
 
@@ -74,7 +73,6 @@ class PledgeList(APIView):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly, 
         IsOwnerOrReadOnly,
-        permissions.IsAuthenticated
     ]
 
     def get(self, request):
@@ -100,7 +98,6 @@ class PledgeDetail(APIView):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly, 
         IsOwnerOrReadOnly,
-        permissions.IsAuthenticated
     ]
 
     def get_object(self, pk):

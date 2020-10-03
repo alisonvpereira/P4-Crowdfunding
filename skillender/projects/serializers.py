@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Project, Pledge, Category, Skill
 
+
 class ProjectSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     title = serializers.CharField(max_length=200)
@@ -99,12 +100,13 @@ class SkillSerializer(serializers.Serializer):
     updated_at = serializers.ReadOnlyField()
     image = serializers.URLField()
 
-    pledges = PledgeSerializer(many=True, read_only=True)
-
+   
     def create(self, validated_data):
         return Skill.objects.create(**validated_data)
 
 class SkillDetailSerializer(SkillSerializer):
+    pledges = PledgeSerializer(many=True, read_only=True)
+
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.description = validated_data.get('description', instance.description)

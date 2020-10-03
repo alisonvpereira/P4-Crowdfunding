@@ -156,19 +156,19 @@ class CategoryDetail(APIView):
         permissions.IsAuthenticatedOrReadOnly, IsStaffOrReadOnly
     ]
 
-    def get_object(self, pk):
+    def get_object(self, name):
         try:
-            return Category.objects.get(pk=pk)
+            return Category.objects.get(name=name)
         except Category.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk):
-        category = self.get_object(pk)
+    def get(self, request, name):
+        category = self.get_object(name)
         serializer = CategoryDetailSerializer(category)
         return Response(serializer.data)
 
-    def put(self, request, pk):
-        category = self.get_object(pk)
+    def put(self, request, name):
+        category = self.get_object(name)
         data = request.data
         serializer = CategoryDetailSerializer(instance=category,
                                               data=data,
@@ -181,8 +181,8 @@ class CategoryDetail(APIView):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    def delete(self, request, pk, format=None):
-        category = self.get_object(pk)
+    def delete(self, request, name, format=None):
+        category = self.get_object(name)
         category.delete()
         return Response("Category Deleted", status=status.HTTP_204_NO_CONTENT)
 

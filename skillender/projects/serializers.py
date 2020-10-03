@@ -82,6 +82,8 @@ class CategorySerializer(serializers.Serializer):
         return Category.objects.create(**validated_data)
 
 class CategoryDetailSerializer(CategorySerializer):
+    projects = ProjectSerializer(many=True, read_only=True)
+
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.description = validated_data.get('description', instance.description)
@@ -96,6 +98,8 @@ class SkillSerializer(serializers.Serializer):
     created_at = serializers.ReadOnlyField()
     updated_at = serializers.ReadOnlyField()
     image = serializers.URLField()
+
+    pledges = PledgeSerializer(many=True, read_only=True)
 
     def create(self, validated_data):
         return Skill.objects.create(**validated_data)

@@ -48,7 +48,7 @@ class Project(models.Model):
         on_delete=models.CASCADE,
         related_name='owner_projects'
     )
-    category = models.ManyToManyField(Category, help_text='Select a category for this project')
+    category = models.ManyToManyField(Category, help_text='Select a category for this project', related_name='projects')
     
 
     def display_category(self):
@@ -65,7 +65,7 @@ class Project(models.Model):
 
 class Pledge(models.Model):
     hours = models.IntegerField()
-    skill = models.ManyToManyField(Skill, help_text='Select a skill for this project')
+    skill = models.ManyToManyField(Skill, help_text='Select a skill for this project', related_name='pledges')
     comment = models.CharField(max_length=200)
     anonymous = models.BooleanField()
     date_created = models.DateTimeField(auto_now_add=True)

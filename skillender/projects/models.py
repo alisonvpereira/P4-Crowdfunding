@@ -63,6 +63,14 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def total_pledge_hours(self):
+        pledges = Pledge.objects.filter(project = self.id)
+        pledge_total = 0
+        for pledge in pledges:
+            pledge_total = pledge_total + pledge.hours 
+        return pledge_total
+
 class Pledge(models.Model):
     hours = models.IntegerField()
     skill = models.ManyToManyField(Skill, help_text='Select a skill for this project', related_name='pledges')

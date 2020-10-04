@@ -14,6 +14,7 @@ class ProjectSerializer(serializers.Serializer):
     date_created = serializers.ReadOnlyField()
     date_updated = serializers.ReadOnlyField()
     owner = serializers.ReadOnlyField(source='owner.username')
+    total_pledge_hours = serializers.ReadOnlyField()
     
 
     def create(self, validated_data):

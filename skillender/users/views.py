@@ -66,6 +66,9 @@ class CustomUserDetail(APIView):
         )
 
 
+
+
+
 # class ProfileView(APIView):
 #     permission_classes = [
 #         permissions.IsAuthenticatedOrReadOnly, IsCurrentUserOrReadOnly
@@ -140,3 +143,10 @@ class ProfileView(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST,
         )
+    
+    def delete(self, request, username, format=None):
+        user = self.get_object(username)
+        user.delete()
+        return Response("User Deleted", status=status.HTTP_204_NO_CONTENT)
+
+    

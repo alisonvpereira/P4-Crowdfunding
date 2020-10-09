@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from projects.models import Skill
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
 
@@ -55,3 +55,13 @@ class Profile(models.Model):
 def create_related_profile(sender, instance, created, *args, **kwargs):
     if instance and created:
         instance.profile = Profile.objects.create(user=instance)
+
+
+def delete_user(sender, instance=None, **kwargs):
+    try:
+        instance.user
+    except User.DoesNotExist:
+        pass
+    else:
+        instance.user.delete()
+post_delete.connect(delete_user, sender=Profile)
